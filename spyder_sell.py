@@ -8,6 +8,7 @@ import time
 import pandas as pd
 from pandas import Series, DataFrame
 from file import File
+from send_wechat_message import send_message
 #URL（ここにURLを入れてください）
 #url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC031/?ar=030&ta=13&bs=040&smk=n01&cinsc=134&tm=035&tmkbn=1'
 url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&cb=0.0&ct=9999999&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=09&pc=50'
@@ -157,3 +158,4 @@ area_url_json=File('area_url.json').load_file()
 for (area, url) in area_url_json['rental'].items():
     main(area, url)
     time.sleep(5)
+send_message('grep rental finished')
