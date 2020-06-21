@@ -12,7 +12,7 @@ from send_wechat_message import send_message
 #URL（ここにURLを入れてください）
 #url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC031/?ar=030&ta=13&bs=040&smk=n01&cinsc=134&tm=035&tmkbn=1'
 url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&cb=0.0&ct=9999999&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=09&pc=50'
-nerima_url = 'https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&sc=13120&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1'
+
 result_dict={}
 
 def main(area, url):
