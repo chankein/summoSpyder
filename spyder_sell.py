@@ -10,8 +10,59 @@ from pandas import Series, DataFrame
 from file import File
 from send_wechat_message import send_message
 #URL（ここにURLを入れてください）
-#url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC031/?ar=030&ta=13&bs=040&smk=n01&cinsc=134&tm=035&tmkbn=1'
-url = 'https://suumo.jp/jj/chintai/ichiran/FR301FC001/?ar=030&bs=040&ta=13&sc=13101&cb=0.0&ct=9999999&mb=0&mt=9999999&et=9999999&cn=9999999&shkr1=03&shkr2=03&shkr3=03&shkr4=03&sngz=&po1=09&pc=50'
+url = 'https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1'
+main_url='https://suumo.jp/chukoikkodate/tokyo/city/'
+domain = 'https://suumo.jp'
+names = []
+addresses = []
+locations = []
+land_spaces = []
+building_spaces = []
+floor_planses = []
+biuild_date = []
+detail_urls = []
+tels = []
+
+
+def each_page(single_page_url, houses=None):
+    if not houses:
+        result = requests.get(url)
+        c = result.content
+        soup = BeautifulSoup(c, "lxml")
+        summary = soup.find("div", {'id': 'js-bukkenList'})
+        houses = summary.find_all(
+            "div", {'class': 'property_unit-content'})
+ 
+
+    for house in houses:
+
+        house_title = house.find('h2', class_='property_unit-title').find('a')
+        name = house_title.text
+        detail_url = house_title['href']
+        house_detail = house.find('div', class_='dottable dottable--cassette')
+        house_price = house_detail.find('span', class_='dottable-value').text
+
+        house_locate_detail = house_detail.find_all(
+            'div', class_='dottable-line')
+        address = house_locate_detail[1].find_all('dd')[0].text
+        location = house_locate_detail[1].find_all('dd')[1].text
+
+        house_detail_in = house_detail.find_all('table')
+        land_space = house_detail_in[0].find_all('dd')[0].text
+        building_space = house_detail_in[1].find_all('dd')[0].text
+        floor_plans = house_detail_in[0].find_all('dd')[1].text
+        biuild_date = house_detail_in[1].find_all('dd')[1].text
+        tel = house.find('span', class_='makermore-tel-txt').text
+
+        names.append(name)
+        addresses.append(address)
+        locations.append(location)
+        land_spaces.append(land_space)
+        building_spaces.append(building_space)
+        floor_planses.append(floor_plans)
+        detail_urls.append(domain+detail_url)
+        tels.append(tel)
+
 
 def main(area, url):
     result = requests.get(url)
@@ -22,6 +73,19 @@ def main(area, url):
     summary = soup.find("div",{'id':'js-bukkenList'})
     body = soup.find("body")
     pages = body.find_all("div",{'class':'pagination pagination_set-nav'})
+    
+    return pages
+    if len(pages)==2:
+        each_page('', houses=None)
+    else:
+
+
+
+
+
+
+
+    #pages:翻页导航按钮
     pages_text = str(pages)
     pages_split = pages_text.split('</a></li>\n</ol>')
     pages_split0 = pages_split[0]
@@ -58,20 +122,23 @@ def main(area, url):
         c = result.content
         soup = BeautifulSoup(c, "lxml")
         summary = soup.find("div",{'id':'js-bukkenList'})
-        apartments = summary.find_all("div",{'class':'cassetteitem'})
+        houses = summary.find_all(
+            "div", {'class': 'property_unit-content'})
 
-        for apartment in apartments:
+        for house in houses:
 
-            room_number = len(apartment.find_all('tbody'))
+            #room_number = len(house.find_all('tbody'))
 
-            name = apartment.find('div', class_='cassetteitem_content-title').text
-            address = apartment.find('li', class_='cassetteitem_detail-col1').text
+            name = house.find('div', class_='property_unit-title"').text
+            address = house.find(
+                'li', class_='cassetteitem_detail-col1').text
 
-            for i in range(room_number):
-                names.append(name)
-                addresses.append(address)
+            #for i in range(room_number):
+            #    names.append(name)
+            #    addresses.append(address)
 
-            sublocation = apartment.find('li', class_='cassetteitem_detail-col2')
+            sublocation = house.find(
+                'li', class_='cassetteitem_detail-col2')
             cols = sublocation.find_all('div')
             for i in range(len(cols)):
                 text = cols[i].find(text=True)
@@ -83,7 +150,8 @@ def main(area, url):
                     elif i == 2:
                         locations2.append(text)
 
-            age_and_height = apartment.find('li', class_='cassetteitem_detail-col3')
+            age_and_height = house.find(
+                'li', class_='cassetteitem_detail-col3')
             age = age_and_height('div')[0].text
             height = age_and_height('div')[1].text
 
@@ -91,7 +159,7 @@ def main(area, url):
                 ages.append(age)
                 heights.append(height)
 
-            table = apartment.find('table')
+            table = house.find('table')
             rows = []
             rows.append(table.find_all('tr'))
 
