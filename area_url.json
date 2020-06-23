@@ -6,9 +6,39 @@
         "練馬区": "https://suumo.jp/chintai/tokyo/sc_nerima/"
     },
     "secondHandHouse": {
+        "千代田区": "/chukoikkodate/tokyo/sc_chiyoda/",
+        "中央区": "/chukoikkodate/tokyo/sc_chuo/",
+        "港区": "/chukoikkodate/tokyo/sc_minato/",
+        "新宿区": "/chukoikkodate/tokyo/sc_shinjuku/",
+        "文京区": "/chukoikkodate/tokyo/sc_bunkyo/",
+        "渋谷区": "/chukoikkodate/tokyo/sc_shibuya/",
+        "台東区": "/chukoikkodate/tokyo/sc_taito/",
+        "墨田区": "/chukoikkodate/tokyo/sc_sumida/",
+        "江東区": "/chukoikkodate/tokyo/sc_koto/",
+        "荒川区": "/chukoikkodate/tokyo/sc_arakawa/",
+        "足立区": "/chukoikkodate/tokyo/sc_adachi/",
+        "葛飾区": "/chukoikkodate/tokyo/sc_katsushika/",
+        "江戸川区": "/chukoikkodate/tokyo/sc_edogawa/",
+        "品川区": "/chukoikkodate/tokyo/sc_shinagawa/",
+        "目黒区": "/chukoikkodate/tokyo/sc_meguro/",
+        "大田区": "/chukoikkodate/tokyo/sc_ota/",
+        "世田谷区": "/chukoikkodate/tokyo/sc_setagaya/",
+        "中野区": "/chukoikkodate/tokyo/sc_nakano/",
+        "杉並区": "/chukoikkodate/tokyo/sc_suginami/",
+        "練馬区": "/chukoikkodate/tokyo/sc_nerima/",
+        "豊島区": "/chukoikkodate/tokyo/sc_toshima/",
+        "北区": "/chukoikkodate/tokyo/sc_kita/",
+        "板橋区": "/chukoikkodate/tokyo/sc_itabashi/",
+        "八王子市": "/chukoikkodate/tokyo/sc_hachioji/",
+        "立川市": "/chukoikkodate/tokyo/sc_tachikawa/",
+        "武蔵野市": "/chukoikkodate/tokyo/sc_musashino/",
+        "三鷹市": "/chukoikkodate/tokyo/sc_mitaka/",
+        "青梅市": "/chukoikkodate/tokyo/sc_ome/"
+    },
+    "secondHandHouse2": {
         "練馬区": "https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&sc=13120&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1",
         "千代田区": "https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1",
         "世田谷区": "https://suumo.jp/chukoikkodate/tokyo/sc_setagaya/"
-    
+
     }
 }
