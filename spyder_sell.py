@@ -13,18 +13,10 @@ from send_wechat_message import send_message
 #url = 'https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1'
 #nerima_url = 'https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&sc=13120&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1'
 #main_url='https://suumo.jp/chukoikkodate/tokyo/city/'
-#domain = 'https://suumo.jp'
+domain = 'https://suumo.jp'
 
 area_url_json = File('area_url.json').load_file()
 
-for (area, url) in area_url_json['secondHandHouse'].items():
-    try:
-        main(area, url)
-        time.sleep(5)
-    except Exception:
-        send_message(area+' failed')
-
-send_message('grep sell old houses finished')
 
 def each_page(single_page_url, houses=None):
     if not houses:
@@ -122,3 +114,11 @@ def main(area, url):
     suumo_df.to_csv(area + '_old_house.csv', encoding='utf-16', header=True, index=False)
 
 
+for (area, url) in area_url_json['secondHandHouse'].items():
+    try:
+        main(area, (domain+url))
+        time.sleep(5)
+    except Exception:
+        send_message(area+' failed')
+
+send_message('grep sell old houses finished')
