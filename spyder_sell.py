@@ -55,8 +55,8 @@ def each_page(single_page_url, houses=None):
         building_space = house_detail_in[1].find_all('dd')[0].text
         floor_plans = house_detail_in[0].find_all('dd')[1].text
         biuild_date = house_detail_in[1].find_all('dd')[1].text
-        tel = house.find('span', class_='makermore-tel-txt').text
-
+        if house.find('span', class_='makermore-tel-txt'):
+            tel = house.find('span', class_='makermore-tel-txt').text
         names.append(name)
         addresses.append(address)
         locations.append(location)
@@ -109,7 +109,7 @@ def main(area, url):
             pages_url = url + 'pnz1{}.html'.format(str(x))
             suumo_df_list.append(each_page(pages_url, houses=None))
             time.sleep(3)
-    suumo_df = pandas.concat(suumo_df_list)
+    suumo_df = pd.concat(suumo_df_list)
 
     suumo_df.to_csv(area + '_old_house.csv', encoding='utf-16', header=True, index=False)
 
