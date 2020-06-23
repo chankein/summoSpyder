@@ -115,10 +115,11 @@ def main(area, url):
 
 
 for (area, url) in area_url_json['secondHandHouse'].items():
-    try:
+    #try:
         main(area, (domain+url))
         time.sleep(5)
-    except Exception:
-        send_message(area+' failed')
+        exit()
+    #except Exception:
+    #    send_message(area+' failed')
 
 send_message('grep sell old houses finished')
