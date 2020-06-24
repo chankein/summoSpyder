@@ -19,8 +19,8 @@ area_url_json = File('area_url.json').load_file()
 
 
 def each_page(single_page_url, houses=None):
-    if not houses:
-        result = requests.get(url)
+    if houses==None:
+        result = requests.get(single_page_url)
         c = result.content
         soup = BeautifulSoup(c, "lxml")
         summary = soup.find("div", {'id': 'js-bukkenList'})
@@ -46,9 +46,14 @@ def each_page(single_page_url, houses=None):
         house_price = house_detail.find('span', class_='dottable-value').text
 
         house_locate_detail = house_detail.find_all(
-            'div', class_='dottable-line')
-        address = house_locate_detail[1].find_all('dd')[0].text
-        location = house_locate_detail[1].find_all('dd')[1].text
+            'div', class_='dottable-line')[1].find_all('dd')
+
+        address = house_locate_detail[0].text
+        if len(house_locate_detail) == 1:
+            print(house_locate_detail[0].text)
+            location = ''
+        else:
+            location = house_locate_detail[1].text
 
         house_detail_in = house_detail.find_all('table')
         land_space = house_detail_in[0].find_all('dd')[0].text
@@ -57,6 +62,8 @@ def each_page(single_page_url, houses=None):
         biuild_date = house_detail_in[1].find_all('dd')[1].text
         if house.find('span', class_='makermore-tel-txt'):
             tel = house.find('span', class_='makermore-tel-txt').text
+        else:
+            tel=''
         names.append(name)
         addresses.append(address)
         locations.append(location)
@@ -114,12 +121,13 @@ def main(area, url):
     suumo_df.to_csv(area + '_old_house.csv', encoding='utf-16', header=True, index=False)
 
 
-for (area, url) in area_url_json['secondHandHouse'].items():
-    try:
-        main(area, (domain+url))
-        time.sleep(5)
-    except Exception:
-        pass
+main('練馬区', 'https://suumo.jp/chukoikkodate/tokyo/sc_nerima/')
+#for (area, url) in area_url_json['secondHandHouse'].items():
+    #try:
+#    main(area, (domain+url))
+#    time.sleep(5)
+    #except Exception:
+    #    pass
     #    send_message(area+' failed')
 
 #send_message('grep sell old houses finished')
