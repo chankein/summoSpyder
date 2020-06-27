@@ -121,7 +121,7 @@ def main(area, url):
     suumo_df.to_csv(area + '_old_house.csv', encoding='utf-16', header=True, index=False)
 
 
-main('練馬区', 'https://suumo.jp/chukoikkodate/tokyo/sc_nerima/')
+main('千代田区', 'https://suumo.jp/chukoikkodate/tokyo/sc_chiyoda/')
 #for (area, url) in area_url_json['secondHandHouse'].items():
     #try:
 #    main(area, (domain+url))
