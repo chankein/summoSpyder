@@ -29,12 +29,12 @@ class HouseArea:
     def each_page(self, single_page_url):
         result = requests.get(single_page_url)
         c = result.content
-        soup = BeautifulSoup(c, "lxml")
-        summary = soup.find("div", {'id': 'js-bukkenList'})
-        self.houses = summary.find_all(
+        self.soup = BeautifulSoup(c, "lxml")
+        self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
+        self.houses = self.summary.find_all(
             "div", {'class': 'property_unit- content'})
         if len(self.suumo_df_list)==0:
-            body = soup.find("body")
+            body = self.soup.find("body")
             pages = body.find_all(
                 "div", {'class': 'pagination pagination_set-nav'})
             self.next_pages = pages[0].find_all('a')
