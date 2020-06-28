@@ -151,6 +151,11 @@ class HouseArea:
 
 
 if __name__=='__main__':
+    if debug==0:
+        pass
+    else:
+        area_url_json['secondHandHouse'] = {
+            "練馬区": "/chukoikkodate/tokyo/sc_nerima/", "千代田区": "/chukoikkodate/tokyo/sc_chiyoda/"}
     for (area, url) in area_url_json['secondHandHouse'].items():
         AREACLASS = HouseArea(area)
         AREACLASS.each_page(AREACLASS.main_url)
