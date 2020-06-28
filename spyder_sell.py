@@ -18,7 +18,7 @@ domain = 'https://suumo.jp'
 area_url_json = File('area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
-debug=1
+debug=0
 
 class HouseArea:
     def __init__(self, area):
