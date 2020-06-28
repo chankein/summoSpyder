@@ -52,35 +52,71 @@ class HouseArea:
         tels = []
 
         for house in houses:
+            name = ''
+            house_price = ''
+            address = ''
+            location = ''
+            land_space = ''
+            building_space = ''
+            floor_plans = ''
+            biuild_date = ''
+            detail_url = ''
+            tel = ''
 
             house_title = house.find('h2', class_='property_unit-title').find('a')
             name = house_title.text.replace('\n', '')
             detail_url = house_title['href']
             house_detail = house.find('div', class_='dottable dottable--cassette')
-            house_price = house_detail.find(
-                'span', class_='dottable-value').text
-            if house_price==None:
-                if '円' in name.split(' ')[-1]:
-                    house_price = name.split(' ')[-1]
-            else:
-                house_price = house_price.replace('\n', '')
+            tables = house_detail.find_all('dl')
+            for table in tables:
+                this_title = table.find('dt').text
+                this_value = table.find('dd').text
+                if '販売価格' in this_title:
+                    house_price = this_value.replace('\n', '')
+                elif '所在地' in this_title:
+                    address = this_value.replace('\n', '')
 
-            house_locate_detail = house_detail.find_all(
-                'div', class_='dottable-line')[1].find_all('dd')
+                elif '沿線・駅' in this_title:
+                    location = this_value.replace('\n', '')
+                elif '土地面積' in this_title:
+                    land_space = this_value.replace('\n', '')
+                elif '間取り' in this_title:
+                    floor_plans = this_value.replace('\n', '')
+                elif '建物面積' in this_title:
+                    building_space = this_value.replace('\n', '')
+                elif '築年月' in this_title:
+                    biuild_date = this_value.replace('\n', '')
+                else:
+                    pass
 
-            address = house_locate_detail[0].text.replace('\n', '')
-            if len(house_locate_detail) == 1:
-                # print(house_locate_detail[0].text)
-                location = house_detail.find_all(
-                    'div', class_='dottable-line')[0].find_all('dd')[0].text.replace('\n', '')
-            else:
-                location = house_locate_detail[1].text.replace('\n', '')
 
-            house_detail_in = house_detail.find_all('table')
-            land_space = house_detail_in[0].find_all('dd')[0].text
-            building_space = house_detail_in[1].find_all('dd')[0].text
-            floor_plans = house_detail_in[0].find_all('dd')[1].text
-            biuild_date = house_detail_in[1].find_all('dd')[1].text
+
+
+
+            # house_price = house_detail.find(
+            #     'span', class_='dottable-value').text
+            # if house_price==None:
+            #     if '円' in name.split(' ')[-1]:
+            #         house_price = name.split(' ')[-1]
+            # else:
+            #     house_price = house_price.replace('\n', '')
+
+            # house_locate_detail = house_detail.find_all(
+            #     'div', class_='dottable-line')[1].find_all('dd')
+
+            # address = house_locate_detail[0].text.replace('\n', '')
+            # if len(house_locate_detail) == 1:
+            #     # print(house_locate_detail[0].text)
+            #     location = house_detail.find_all(
+            #         'div', class_='dottable-line')[0].find_all('dd')[0].text.replace('\n', '')
+            # else:
+            #     location = house_locate_detail[1].text.replace('\n', '')
+
+            # house_detail_in = house_detail.find_all('table')
+            # land_space = house_detail_in[0].find_all('dd')[0].text
+            # building_space = house_detail_in[1].find_all('dd')[0].text
+            # floor_plans = house_detail_in[0].find_all('dd')[1].text
+            # biuild_date = house_detail_in[1].find_all('dd')[1].text
             if house.find('span', class_='makermore-tel-txt'):
                 tel = house.find('span', class_='makermore-tel-txt').text
             else:
