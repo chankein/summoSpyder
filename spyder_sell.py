@@ -54,21 +54,27 @@ class HouseArea:
         for house in houses:
 
             house_title = house.find('h2', class_='property_unit-title').find('a')
-            name = house_title.text
+            name = house_title.text.replace('\n', '')
             detail_url = house_title['href']
             house_detail = house.find('div', class_='dottable dottable--cassette')
-            house_price = house_detail.find('span', class_='dottable-value').text
+            house_price = house_detail.find(
+                'span', class_='dottable-value').text
+            if house_price==None:
+                if '円' in name.split(' ')[-1]:
+                    house_price = name.split(' ')[-1]
+            else:
+                house_price = house_price.replace('\n', '')
 
             house_locate_detail = house_detail.find_all(
                 'div', class_='dottable-line')[1].find_all('dd')
 
-            address = house_locate_detail[0].text
+            address = house_locate_detail[0].text.replace('\n', '')
             if len(house_locate_detail) == 1:
                 # print(house_locate_detail[0].text)
                 location = house_detail.find_all(
-                    'div', class_='dottable-line')[0].find_all('dd')[0].text
+                    'div', class_='dottable-line')[0].find_all('dd')[0].text.replace('\n', '')
             else:
-                location = house_locate_detail[1].text
+                location = house_locate_detail[1].text.replace('\n', '')
 
             house_detail_in = house_detail.find_all('table')
             land_space = house_detail_in[0].find_all('dd')[0].text
