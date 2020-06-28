@@ -89,14 +89,14 @@ class HouseArea:
             tels.append(tel)
             if debug==1:
                 print('name= '+name)
-                print('house_prices= '+house_prices)
-                print('addresses= '+addresses)
-                print('locations= '+locations)
-                print('land_spaces= '+land_spaces)
-                print('building_spaces= '+building_spaces)
-                print('floor_planses= '+floor_planses)
+                print('house_prices= '+house_price)
+                print('addresses= '+addresse)
+                print('locations= '+location)
+                print('land_spaces= '+land_space)
+                print('building_spaces= '+building_space)
+                print('floor_planses= '+floor_planse)
                 print('biuild_date= '+biuild_date)
-                print('tels= '+tels)
+                print('tels= '+tel)
 
         
         names = Series(names)
