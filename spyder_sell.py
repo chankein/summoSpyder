@@ -148,7 +148,7 @@ class HouseArea:
         land_spaces = Series(land_spaces)
         building_spaces = Series(building_spaces)
         floor_planses = Series(floor_planses)
-        biuild_date = Series(biuild_date)
+        biuild_date = Series(biuild_dates)
         detail_urls = Series(detail_urls)
         tels = Series(tels)
         suumo_df_pages = pd.concat([names, house_prices, addresses, locations, land_spaces, building_spaces, floor_planses,
