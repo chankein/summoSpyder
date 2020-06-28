@@ -29,12 +29,12 @@ class HouseArea:
     def each_page(self, single_page_url):
         result = requests.get(single_page_url)
         c = result.content
-        self.soup = BeautifulSoup(c, "lxml")
-        self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
-        self.houses = self.summary.find_all(
+        soup = BeautifulSoup(c, "lxml")
+        summary = soup.find("div", {'id': 'js-bukkenList'})
+        houses = summary.find_all(
             "div", {'class': 'property_unit-content'})
         if len(self.suumo_df_list)==0:
-            body = self.soup.find("body")
+            body = soup.find("body")
             pages = body.find_all(
                 "div", {'class': 'pagination pagination_set-nav'})
             self.next_pages = pages[0].find_all('a')
@@ -51,7 +51,7 @@ class HouseArea:
         detail_urls = []
         tels = []
 
-        for house in self.houses:
+        for house in houses:
 
             house_title = house.find('h2', class_='property_unit-title').find('a')
             name = house_title.text
@@ -154,8 +154,8 @@ if __name__=='__main__':
     if debug==0:
         pass
     else:
-        area_url_json['secondHandHouse'] = {
-            "練馬区": "/chukoikkodate/tokyo/sc_nerima/", "千代田区": "/chukoikkodate/tokyo/sc_chiyoda/"}
+        area_url_json['secondHandHouse'] = {"千代田区": "/chukoikkodate/tokyo/sc_chiyoda/",
+            "練馬区": "/chukoikkodate/tokyo/sc_nerima/"}
     for (area, url) in area_url_json['secondHandHouse'].items():
         AREACLASS = HouseArea(area)
         AREACLASS.each_page(AREACLASS.main_url)
