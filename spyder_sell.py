@@ -90,11 +90,11 @@ class HouseArea:
             if debug==1:
                 print('name= '+name)
                 print('house_prices= '+house_price)
-                print('addresses= '+addresse)
+                print('addresses= '+address)
                 print('locations= '+location)
                 print('land_spaces= '+land_space)
                 print('building_spaces= '+building_space)
-                print('floor_planses= '+floor_planse)
+                print('floor_planses= '+floor_plans)
                 print('biuild_date= '+biuild_date)
                 print('tels= '+tel)
 
