@@ -127,6 +127,7 @@ class HouseArea:
             land_spaces.append(land_space)
             building_spaces.append(building_space)
             floor_planses.append(floor_plans)
+            biuild_dates.append(biuild_date)
             detail_urls.append(domain+detail_url)
             tels.append(tel)
             if debug==1:
@@ -148,11 +149,11 @@ class HouseArea:
         land_spaces = Series(land_spaces)
         building_spaces = Series(building_spaces)
         floor_planses = Series(floor_planses)
-        biuild_date = Series(biuild_dates)
+        biuild_dates = Series(biuild_dates)
         detail_urls = Series(detail_urls)
         tels = Series(tels)
         suumo_df_pages = pd.concat([names, house_prices, addresses, locations, land_spaces, building_spaces, floor_planses,
-                            biuild_date, detail_urls, tels], axis=1)
+                            biuild_dates, detail_urls, tels], axis=1)
         suumo_df_pages.columns = ['マンション名', '販売価格', '住所', '立地', '土地面積',
                                 '建物面積',  '間取り', '築年月', '詳細URL', '電話']
         self.suumo_df_list.append(suumo_df_pages)
@@ -214,6 +215,7 @@ if __name__=='__main__':
         suumo_df = pd.concat(AREACLASS.suumo_df_list)
 
         suumo_df.to_csv(area + '_old_house.csv', encoding='utf-16', header=True, index=False)
+        time.sleep(5)
 
 
 #main('千代田区', 'https://suumo.jp/chukoikkodate/tokyo/sc_chiyoda/')
