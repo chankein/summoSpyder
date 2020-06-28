@@ -18,7 +18,7 @@ domain = 'https://suumo.jp'
 area_url_json = File('area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
-
+debug=1
 
 class HouseArea:
     def __init__(self, area):
@@ -64,8 +64,9 @@ class HouseArea:
 
             address = house_locate_detail[0].text
             if len(house_locate_detail) == 1:
-                print(house_locate_detail[0].text)
-                location = ''
+                # print(house_locate_detail[0].text)
+                location = house_detail.find_all(
+                    'div', class_='dottable-line')[0].find_all('dd')[0].text
             else:
                 location = house_locate_detail[1].text
 
@@ -86,6 +87,17 @@ class HouseArea:
             floor_planses.append(floor_plans)
             detail_urls.append(domain+detail_url)
             tels.append(tel)
+            if debug==1:
+                print('name= '+name)
+                print('house_prices= '+house_prices)
+                print('addresses= '+addresses)
+                print('locations= '+locations)
+                print('land_spaces= '+land_spaces)
+                print('building_spaces= '+building_spaces)
+                print('floor_planses= '+floor_planses)
+                print('biuild_date= '+biuild_date)
+                print('tels= '+tels)
+
         
         names = Series(names)
         house_prices = Series(house_prices)
