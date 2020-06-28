@@ -32,7 +32,7 @@ class HouseArea:
         self.soup = BeautifulSoup(c, "lxml")
         self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
         self.houses = self.summary.find_all(
-            "div", {'class': 'property_unit- content'})
+            "div", {'class': 'property_unit-content'})
         if len(self.suumo_df_list)==0:
             body = self.soup.find("body")
             pages = body.find_all(
