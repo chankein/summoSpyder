@@ -47,7 +47,7 @@ class HouseArea:
         land_spaces = []
         building_spaces = []
         floor_planses = []
-        biuild_date = []
+        biuild_dates = []
         detail_urls = []
         tels = []
 
@@ -75,7 +75,6 @@ class HouseArea:
                     house_price = this_value.replace('\n', '')
                 elif '所在地' in this_title:
                     address = this_value.replace('\n', '')
-
                 elif '沿線・駅' in this_title:
                     location = this_value.replace('\n', '')
                 elif '土地面積' in this_title:
@@ -122,6 +121,7 @@ class HouseArea:
             else:
                 tel=''
             names.append(name)
+            house_prices.append(house_price)
             addresses.append(address)
             locations.append(location)
             land_spaces.append(land_space)
@@ -156,7 +156,7 @@ class HouseArea:
         suumo_df_pages.columns = ['マンション名', '販売価格', '住所', '立地', '土地面積',
                                 '建物面積',  '間取り', '築年月', '詳細URL', '電話']
         self.suumo_df_list.append(suumo_df_pages)
-        return house
+        #return suumo_df_pages
 
 
 
@@ -209,7 +209,7 @@ if __name__=='__main__':
                 for x in range(2, max_pages+1):
                     pages_url = AREACLASS.main_url + \
                         'pnz1{}.html'.format(str(x))
-                    
+                    AREACLASS.each_page(pages_url)
                     time.sleep(3)
         suumo_df = pd.concat(AREACLASS.suumo_df_list)
 
