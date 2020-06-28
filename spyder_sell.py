@@ -30,8 +30,8 @@ class HouseArea:
         result = requests.get(single_page_url)
         c = result.content
         soup = BeautifulSoup(c, "lxml")
-        summary = soup.find("div", {'id': 'js-bukkenList'})
-        houses = summary.find_all(
+        self.summary = soup.find("div", {'id': 'js-bukkenList'})
+        houses = self.summary.find_all(
             "div", {'class': 'property_unit-content'})
         if len(self.suumo_df_list)==0:
             body = soup.find("body")
@@ -120,7 +120,7 @@ class HouseArea:
         suumo_df_pages.columns = ['マンション名', '販売価格', '住所', '立地', '土地面積',
                                 '建物面積',  '間取り', '築年月', '詳細URL', '電話']
         self.suumo_df_list.append(suumo_df_pages)
-        #return suumo_df_pages
+        return house
 
 
 
