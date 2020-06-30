@@ -20,18 +20,33 @@ domain = 'https://suumo.jp'
 area_url_json = File('area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
-debug=0
+debug=1
 
 def deal_price(price_string):
-    price_string=price_string.replace('億円','0000').replace('万円','').replace('億','')
+    price_string = price_string.replace('億円', '0000').replace('万円', '').replace('億', '').replace('円', '')
     if '～' in price_string:
-        price_avg=(int(price_range.split('～')[0])+int(price_range.split('～')[1]))/2
+        price_avg = (int(price_string.split('～')[0])+int(price_string.split('～')[1]))/2
         return price_avg
+    elif '・' in price_string:
+        price_avg = (int(price_string.split('・')[
+                     0])+int(price_string.split('・')[1]))/2
+        return price_avg
+    elif '権利金' in price_string:
+        price_string = 0
+    elif '万' in price_string:
+        price_string = (int(price_string.split('万')[0])+int(price_string.split('万')[1]))/10000
     else:
-        return int(price_string)
+        try:
+            price_string = int(price_string)
+        except:
+            print(price_string)
+            price_string = 0
+        return price_string
 
 def deal_build_years(date_string):
     now=datetime.datetime.now()
+    date_string = date_string.replace(
+        '末', '').replace('上旬', '').replace('初旬', '').replace('中旬', '').replace('下旬', '')
     try:
         if '月' in date_string:
             build_date=datetime.datetime.strptime(date_string,'%Y年%m月')
@@ -74,6 +89,7 @@ class HouseArea:
         building_spaces = []
         floor_planses = []
         biuild_dates = []
+        biuild_ages = []
         detail_urls = []
         tels = []
 
@@ -87,6 +103,7 @@ class HouseArea:
             building_space = ''
             floor_plans = ''
             biuild_date = ''
+            biuild_age = ''
             detail_url = ''
             tel = ''
 
@@ -116,6 +133,7 @@ class HouseArea:
                     building_space = this_value.replace('\n', '')
                 elif '築年月' in this_title:
                     biuild_date = this_value.replace('\n', '')
+                    biuild_age = deal_build_years(biuild_date)
                 else:
                     pass
             if house.find('span', class_='makermore-tel-txt'):
@@ -131,6 +149,7 @@ class HouseArea:
             building_spaces.append(building_space)
             floor_planses.append(floor_plans)
             biuild_dates.append(biuild_date)
+            biuild_ages.append(biuild_age)
             detail_urls.append(domain+detail_url)
             tels.append(tel)
             if debug==1:
@@ -154,12 +173,13 @@ class HouseArea:
         building_spaces = Series(building_spaces)
         floor_planses = Series(floor_planses)
         biuild_dates = Series(biuild_dates)
+        biuild_ages = Series(biuild_ages)
         detail_urls = Series(detail_urls)
         tels = Series(tels)
         suumo_df_pages = pd.concat([names, house_prices, house_prices_nums, addresses, locations, land_spaces, building_spaces, floor_planses,
-                            biuild_dates, detail_urls, tels], axis=1)
+                                    biuild_dates, biuild_ages, detail_urls, tels], axis=1)
         suumo_df_pages.columns = ['マンション名', '販売価格', '販売価格(万円)','住所', '立地', '土地面積',
-                                '建物面積',  '間取り', '築年月', '詳細URL', '電話']
+                                  '建物面積',  '間取り', '築年月', '築年数', '詳細URL', '電話']
         self.suumo_df_list.append(suumo_df_pages)
 
 
@@ -167,9 +187,28 @@ if __name__=='__main__':
     if debug==0:
         pass
     else:
-        area_url_json['secondHandHouse'] = {"千代田区": "/chukoikkodate/tokyo/sc_chiyoda/",
-            "練馬区": "/chukoikkodate/tokyo/sc_nerima/"}
+        area_url_json['secondHandHouse'] = {"横浜市鶴見区": "/chukoikkodate/kanagawa/sc_yokohamashitsurumi/",
+                                            "横浜市神奈川区": "/chukoikkodate/kanagawa/sc_yokohamashikanagawa/",
+                                            "横浜市西区": "/chukoikkodate/kanagawa/sc_yokohamashinishi/",
+                                            "横浜市中区": "/chukoikkodate/kanagawa/sc_yokohamashinaka/",
+                                            "横浜市南区": "/chukoikkodate/kanagawa/sc_yokohamashiminami/",
+                                            "横浜市保土ケ谷区": "/chukoikkodate/kanagawa/sc_yokohamashihodogaya/",
+                                            "横浜市磯子区": "/chukoikkodate/kanagawa/sc_yokohamashiisogo/",
+                                            "横浜市金沢区": "/chukoikkodate/kanagawa/sc_yokohamashikanazawa/",
+                                            "横浜市港北区": "/chukoikkodate/kanagawa/sc_yokohamashikohoku/",
+                                            "横浜市戸塚区": "/chukoikkodate/kanagawa/sc_yokohamashitotsuka/",
+                                            "横浜市港南区": "/chukoikkodate/kanagawa/sc_yokohamashikonan/",
+                                            "横浜市旭区": "/chukoikkodate/kanagawa/sc_yokohamashiasahi/",
+                                            "横浜市緑区": "/chukoikkodate/kanagawa/sc_yokohamashimidori/",
+                                            "横浜市瀬谷区": "/chukoikkodate/kanagawa/sc_yokohamashiseya/",
+                                            "横浜市栄区": "/chukoikkodate/kanagawa/sc_yokohamashisakae/",
+                                            "横浜市泉区": "/chukoikkodate/kanagawa/sc_yokohamashiizumi/",
+                                            "横浜市青葉区": "/chukoikkodate/kanagawa/sc_yokohamashiaoba/",
+                                            "横浜市都筑区": "/chukoikkodate/kanagawa/sc_yokohamashitsuzuki/"}
     all_area_list=[]
+    df0 = pd.read_csv('/home/ubuntu/streamlitApp/old_house.csv',
+                      dtype='str', encoding='utf-16')
+    all_area_list.append(df0)
     for (area, url) in area_url_json['secondHandHouse'].items():
         AREACLASS = HouseArea(area)
         AREACLASS.each_page(AREACLASS.main_url)
