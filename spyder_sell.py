@@ -21,6 +21,14 @@ area_url_json = File('area_url.json').load_file()
 prifix_file = '_old_house.csv'
 debug=0
 
+def deal_price(price_string):
+    price_string=price_string.replace('億円','0000').replace('万円','').replace('億','')
+    if '～' in price_string:
+        price_avg=(int(price_range.split('～')[0])+int(price_range.split('～')[1]))/2
+        return price_avg
+    else:
+        return int(price_string)
+
 class HouseArea:
     def __init__(self, area):
         self.main_url = domain + area_url_json['secondHandHouse'][area]
@@ -43,6 +51,7 @@ class HouseArea:
             pass
         names = []
         house_prices = []
+        house_prices_nums = []
         addresses = []
         locations = []
         land_spaces = []
@@ -55,6 +64,7 @@ class HouseArea:
         for house in houses:
             name = ''
             house_price = ''
+            house_prices_num = 0
             address = ''
             location = ''
             land_space = ''
@@ -74,6 +84,10 @@ class HouseArea:
                 this_value = table.find('dd').text
                 if '販売価格' in this_title:
                     house_price = this_value.replace('\n', '')
+                    try:
+                        house_prices_num=deal_price(house_price)
+                    except:
+                        pass
                 elif '所在地' in this_title:
                     address = this_value.replace('\n', '')
                 elif '沿線・駅' in this_title:
@@ -94,6 +108,7 @@ class HouseArea:
                 tel=''
             names.append(name)
             house_prices.append(house_price)
+            house_prices_nums.append(house_prices_num)
             addresses.append(address)
             locations.append(location)
             land_spaces.append(land_space)
@@ -116,6 +131,7 @@ class HouseArea:
         
         names = Series(names)
         house_prices = Series(house_prices)
+        house_prices_nums = Series(house_prices_nums)
         addresses = Series(addresses)
         locations = Series(locations)
         land_spaces = Series(land_spaces)
@@ -124,9 +140,9 @@ class HouseArea:
         biuild_dates = Series(biuild_dates)
         detail_urls = Series(detail_urls)
         tels = Series(tels)
-        suumo_df_pages = pd.concat([names, house_prices, addresses, locations, land_spaces, building_spaces, floor_planses,
+        suumo_df_pages = pd.concat([names, house_prices, house_prices_nums, addresses, locations, land_spaces, building_spaces, floor_planses,
                             biuild_dates, detail_urls, tels], axis=1)
-        suumo_df_pages.columns = ['マンション名', '販売価格', '住所', '立地', '土地面積',
+        suumo_df_pages.columns = ['マンション名', '販売価格', '販売価格(万円)','住所', '立地', '土地面積',
                                 '建物面積',  '間取り', '築年月', '詳細URL', '電話']
         self.suumo_df_list.append(suumo_df_pages)
 
