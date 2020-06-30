@@ -10,6 +10,7 @@ from pandas import Series, DataFrame
 from file import File
 from send_wechat_message import send_message
 import time
+import datetime
 #URL（ここにURLを入れてください）
 #url = 'https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1'
 #nerima_url = 'https://suumo.jp/jj/bukken/ichiran/JJ010FJ001/?ar=030&bs=021&ta=13&jspIdFlg=patternShikugun&sc=13101&sc=13120&kb=1&kt=9999999&tb=0&tt=9999999&hb=0&ht=9999999&ekTjCd=&ekTjNm=&tj=0&cnb=0&cn=9999999&srch_navi=1'
@@ -28,6 +29,21 @@ def deal_price(price_string):
         return price_avg
     else:
         return int(price_string)
+
+def deal_build_years(date_string):
+    now=datetime.datetime.now()
+    try:
+        if '月' in date_string:
+            build_date=datetime.datetime.strptime(date_string,'%Y年%m月')
+        elif '日' in date_string:
+            build_date=datetime.datetime.strptime(date_string,'%Y年%m月%d日')
+        else:
+            build_date=datetime.datetime.strptime(date_string,'%Y年')
+    except:
+        print(date_string)
+        return None
+    return int((now-build_date).days/365)
+    
 
 class HouseArea:
     def __init__(self, area):
