@@ -20,7 +20,7 @@ domain = 'https://suumo.jp'
 area_url_json = File('area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
-debug=1
+debug=0
 
 def deal_price(price_string):
     price_string = price_string.replace('億円', '0000').replace('万円', '').replace('億', '').replace('円', '')
@@ -206,8 +206,7 @@ if __name__=='__main__':
                                             "横浜市青葉区": "/chukoikkodate/kanagawa/sc_yokohamashiaoba/",
                                             "横浜市都筑区": "/chukoikkodate/kanagawa/sc_yokohamashitsuzuki/"}
     all_area_list=[]
-    df0 = pd.read_csv('/home/ubuntu/streamlitApp/old_house.csv',
-                      dtype='str', encoding='utf-16')
+    df0 = pd.read_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',dtype='str', encoding='utf-16')
     all_area_list.append(df0)
     for (area, url) in area_url_json['secondHandHouse'].items():
         AREACLASS = HouseArea(area)
@@ -228,7 +227,7 @@ if __name__=='__main__':
         all_area_list.append(suumo_df)
         time.sleep(5)
     result_df=pd.concat(all_area_list)
-    result_df.to_csv('/home/ubuntu/streamlitApp/old_house.csv',
+    result_df.to_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
                      encoding='utf-16', header=True, index=False)
 
 #main('千代田区', 'https://suumo.jp/chukoikkodate/tokyo/sc_chiyoda/')

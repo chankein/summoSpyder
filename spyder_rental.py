@@ -154,8 +154,8 @@ def main(area, url):
     suumo_df = pd.concat([names, addresses, locations0, locations1, locations2, ages, heights, floors, rent, admin, others, floor_plans, areas, detail_urls], axis=1)
 
     suumo_df.columns = ['マンション名','住所','立地1','立地2','立地3','築年数','建物の高さ','階層','賃料料','管理費', '敷/礼/保証/敷引/償却','間取り','専有面積', '詳細URL']
-
-    suumo_df.to_csv(area + 'rental_suumo.csv', encoding='utf-16', header=True, index=False)
+    
+    suumo_df.to_csv('/home/ubuntu/s3data/ec_s3/'+area + 'rental_suumo.csv', encoding='utf-16', header=True, index=False)
 area_url_json=File('area_url.json').load_file()
 for (area, url) in area_url_json['rental'].items():
     try:
