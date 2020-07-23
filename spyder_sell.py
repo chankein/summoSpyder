@@ -9,6 +9,7 @@ import pandas as pd
 from pandas import Series, DataFrame
 from file import File
 from send_wechat_message import send_message
+from utils import deal_price, deal_build_years
 import time
 import datetime
 #URL（ここにURLを入れてください）
@@ -20,45 +21,8 @@ domain = 'https://suumo.jp'
 area_url_json = File('/home/ubuntu/summoSpyder/area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
-debug=0
+debug = 0
 
-def deal_price(price_string):
-    price_string = price_string.replace('億円', '0000').replace('万円', '').replace('億', '').replace('円', '')
-    if '～' in price_string:
-        price_avg = (int(price_string.split('～')[0])+int(price_string.split('～')[1]))/2
-        return price_avg
-    elif '・' in price_string:
-        price_avg = (int(price_string.split('・')[
-                     0])+int(price_string.split('・')[1]))/2
-        return price_avg
-    elif '権利金' in price_string:
-        price_string = 0
-    elif '万' in price_string:
-        price_string = (int(price_string.split('万')[0])+int(price_string.split('万')[1]))/10000
-    else:
-        try:
-            price_string = int(price_string)
-        except:
-            print(price_string)
-            price_string = 0
-        return price_string
-
-def deal_build_years(date_string):
-    now=datetime.datetime.now()
-    date_string = date_string.replace(
-        '末', '').replace('上旬', '').replace('初旬', '').replace('中旬', '').replace('下旬', '')
-    try:
-        if '月' in date_string:
-            build_date=datetime.datetime.strptime(date_string,'%Y年%m月')
-        elif '日' in date_string:
-            build_date=datetime.datetime.strptime(date_string,'%Y年%m月%d日')
-        else:
-            build_date=datetime.datetime.strptime(date_string,'%Y年')
-    except:
-        print(date_string)
-        return None
-    return int((now-build_date).days/365)
-    
 
 class HouseArea:
     def __init__(self, area):
@@ -73,7 +37,7 @@ class HouseArea:
         self.summary = soup.find("div", {'id': 'js-bukkenList'})
         houses = self.summary.find_all(
             "div", {'class': 'property_unit-content'})
-        if len(self.suumo_df_list)==0:
+        if len(self.suumo_df_list) == 0:
             body = soup.find("body")
             pages = body.find_all(
                 "div", {'class': 'pagination pagination_set-nav'})
@@ -107,10 +71,12 @@ class HouseArea:
             detail_url = ''
             tel = ''
 
-            house_title = house.find('h2', class_='property_unit-title').find('a')
+            house_title = house.find(
+                'h2', class_='property_unit-title').find('a')
             name = house_title.text.replace('\n', '')
             detail_url = house_title['href']
-            house_detail = house.find('div', class_='dottable dottable--cassette')
+            house_detail = house.find(
+                'div', class_='dottable dottable--cassette')
             tables = house_detail.find_all('dl')
             for table in tables:
                 this_title = table.find('dt').text
@@ -118,7 +84,7 @@ class HouseArea:
                 if '販売価格' in this_title:
                     house_price = this_value.replace('\n', '')
                     try:
-                        house_prices_num=deal_price(house_price)
+                        house_prices_num = deal_price(house_price)
                     except:
                         pass
                 elif '所在地' in this_title:
@@ -139,7 +105,7 @@ class HouseArea:
             if house.find('span', class_='makermore-tel-txt'):
                 tel = house.find('span', class_='makermore-tel-txt').text
             else:
-                tel=''
+                tel = ''
             names.append(name)
             house_prices.append(house_price)
             house_prices_nums.append(house_prices_num)
@@ -152,7 +118,7 @@ class HouseArea:
             biuild_ages.append(biuild_age)
             detail_urls.append(domain+detail_url)
             tels.append(tel)
-            if debug==1:
+            if debug == 1:
                 print('name= '+name)
                 print('house_prices= '+house_price)
                 print('addresses= '+address)
@@ -163,7 +129,6 @@ class HouseArea:
                 print('biuild_date= '+biuild_date)
                 print('tels= '+tel)
 
-        
         names = Series(names)
         house_prices = Series(house_prices)
         house_prices_nums = Series(house_prices_nums)
@@ -178,13 +143,13 @@ class HouseArea:
         tels = Series(tels)
         suumo_df_pages = pd.concat([names, house_prices, house_prices_nums, addresses, locations, land_spaces, building_spaces, floor_planses,
                                     biuild_dates, biuild_ages, detail_urls, tels], axis=1)
-        suumo_df_pages.columns = ['マンション名', '販売価格', '販売価格(万円)','住所', '立地', '土地面積',
+        suumo_df_pages.columns = ['マンション名', '販売価格', '販売価格(万円)', '住所', '立地', '土地面積',
                                   '建物面積',  '間取り', '築年月', '築年数', '詳細URL', '電話']
         self.suumo_df_list.append(suumo_df_pages)
 
 
-if __name__=='__main__':
-    if debug==0:
+if __name__ == '__main__':
+    if debug == 0:
         pass
     else:
         area_url_json['secondHandHouse'] = {"横浜市鶴見区": "/chukoikkodate/kanagawa/sc_yokohamashitsurumi/",
@@ -205,8 +170,9 @@ if __name__=='__main__':
                                             "横浜市泉区": "/chukoikkodate/kanagawa/sc_yokohamashiizumi/",
                                             "横浜市青葉区": "/chukoikkodate/kanagawa/sc_yokohamashiaoba/",
                                             "横浜市都筑区": "/chukoikkodate/kanagawa/sc_yokohamashitsuzuki/"}
-    all_area_list=[]
-    df0 = pd.read_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',dtype='str', encoding='utf-16')
+    all_area_list = []
+    df0 = pd.read_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
+                      dtype='str', encoding='utf-16')
     all_area_list.append(df0)
     for (area, url) in area_url_json['secondHandHouse'].items():
         AREACLASS = HouseArea(area)
@@ -226,7 +192,7 @@ if __name__=='__main__':
         suumo_df['日付'] = time.strftime("%Y-%m-%d", time.localtime(time.time()))
         all_area_list.append(suumo_df)
         time.sleep(5)
-    result_df=pd.concat(all_area_list)
+    result_df = pd.concat(all_area_list)
     result_df.to_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
                      encoding='utf-16', header=True, index=False)
 
