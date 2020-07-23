@@ -17,7 +17,7 @@ import datetime
 #main_url='https://suumo.jp/chukoikkodate/tokyo/city/'
 domain = 'https://suumo.jp'
 
-area_url_json = File('area_url.json').load_file()
+area_url_json = File('/home/ubuntu/summoSpyder/area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
 debug=0
