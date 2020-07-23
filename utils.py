@@ -4,8 +4,10 @@ Created on 2019/07/10
 
 @author: Kein-Chan
 '''
+import configparser
+import os
 import datetime
-
+import socket
 
 def deal_billion(bill_price_string):
     if '億' in bill_price_string:
@@ -55,3 +57,12 @@ def deal_build_years(date_string):
         print(date_string)
         return None
     return int((now-build_date).days/365)
+
+def readConf():
+    hostname=socket.gethostname()
+    conf = configparser.ConfigParser()
+    root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    #print(root_path)
+    conf.read(root_path + '/summoSpyder/config.ini')
+    print(root_path + '/summoSpyder/config.ini')
+    return conf, hostname

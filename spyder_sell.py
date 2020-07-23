@@ -9,7 +9,7 @@ import pandas as pd
 from pandas import Series, DataFrame
 from file import File
 from send_wechat_message import send_message
-from utils import deal_price, deal_build_years
+from utils import deal_price, deal_build_years, readConf
 import time
 import datetime
 #URL（ここにURLを入れてください）
@@ -22,7 +22,10 @@ area_url_json = File('/home/ubuntu/summoSpyder/area_url.json').load_file()
 
 prifix_file = '_old_house.csv'
 debug = 0
-
+conf,hostname = readConf()
+s3_home = conf.get(hostname, "s3_home")
+csv_path = s3_home + 'old_house.csv'
+print(csv_path)
 
 class HouseArea:
     def __init__(self, area):
