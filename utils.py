@@ -30,9 +30,11 @@ def deal_price(price_string):
         return price_avg
     elif '権利金' in price_string:
         price_string = 0
+        return price_string
     elif '万' in price_string:
         price_string = (deal_billion(price_string.split(
-            '万')[0])+int(price_string.split('万')[1])/10000)
+            '万')[0])+float(price_string.split('万')[1])/10000)
+        return price_string
     else:
         try:
             price_string = deal_billion(price_string)
@@ -66,3 +68,17 @@ def readConf():
     conf.read(root_path + '/summoSpyder/config.ini')
     print(root_path + '/summoSpyder/config.ini')
     return conf, hostname
+
+
+def deal_size(size_string):
+    if 'm2' in size_string:
+        size=float(size_string.split('m2')[0])
+    elif '㎡' in size_string:
+        size = float(size_string.split('㎡')[0])
+    else:
+        print(size_string)
+        size = 0
+    return size
+
+
+main_area_list=[]

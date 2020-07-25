@@ -25,7 +25,7 @@ debug = 0
 conf,hostname = readConf()
 s3_home = conf.get(hostname, "s3_home")
 csv_path = s3_home + 'old_house.csv'
-print(csv_path)
+#print(csv_path)
 
 class HouseArea:
     def __init__(self, area):
@@ -174,8 +174,9 @@ if __name__ == '__main__':
                                             "横浜市青葉区": "/chukoikkodate/kanagawa/sc_yokohamashiaoba/",
                                             "横浜市都筑区": "/chukoikkodate/kanagawa/sc_yokohamashitsuzuki/"}
     all_area_list = []
-    df0 = pd.read_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
-                      dtype='str', encoding='utf-16')
+    df0 = pd.read_csv(csv_path, dtype='str', encoding='utf-16')
+    # df0 = pd.read_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
+    #                   dtype='str', encoding='utf-16')
     all_area_list.append(df0)
     for (area, url) in area_url_json['secondHandHouse'].items():
         AREACLASS = HouseArea(area)
@@ -196,8 +197,9 @@ if __name__ == '__main__':
         all_area_list.append(suumo_df)
         time.sleep(5)
     result_df = pd.concat(all_area_list)
-    result_df.to_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
-                     encoding='utf-16', header=True, index=False)
+    result_df.to_csv(csv_path,encoding='utf-16', header=True, index=False)
+    # result_df.to_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
+    #                  encoding='utf-16', header=True, index=False)
 
 #main('千代田区', 'https://suumo.jp/chukoikkodate/tokyo/sc_chiyoda/')
 #for (area, url) in area_url_json['secondHandHouse'].items():
