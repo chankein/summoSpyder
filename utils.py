@@ -8,6 +8,7 @@ import configparser
 import os
 import datetime
 import socket
+import pandas as pd
 
 def deal_billion(bill_price_string):
     if '億' in bill_price_string:
@@ -81,4 +82,20 @@ def deal_size(size_string):
     return size
 
 
+def deal_sum_area(df):
+    conf, hostname = readConf()
+    df_list=[df]
+    tokyo23_list=eval(conf.get('common', 'tokyo23'))
+    contoury_list=eval(conf.get('common','contoury_area'))
+    df_all=df.copy()
+
+    df_all['区域']='全区域'
+    df_tokyo=df[df['区域'].isin(tokyo23_list)]
+    df_tokyo['区域']='東京23区'
+    df_contoury=df[df['区域'].isin(contoury_list)]
+    df_contoury['区域']='周辺地区'
+    df_list.append(df_all)
+    df_list.append(df_tokyo)
+    df_list.append(df_contoury)
+    return pd.concat(df_list)
 main_area_list=[]
