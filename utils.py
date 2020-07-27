@@ -9,6 +9,7 @@ import os
 import datetime
 import socket
 import pandas as pd
+import re
 
 def deal_billion(bill_price_string):
     if '億' in bill_price_string:
@@ -98,4 +99,31 @@ def deal_sum_area(df):
     df_list.append(df_tokyo)
     df_list.append(df_contoury)
     return pd.concat(df_list)
+
+
+def get_target_df(df,filter,max=7000,min=99):
+    df_target = df[df['販売価格(万円)'] > min_price]
+    df_target = df_target[df_target['販売価格(万円)'] < max_price]
+    df_target = df_target[df_target['建物面積(m2)'] > 0]
+    return df_target
+
+
+def get_num(num_string):
+    return int(re.findall(r"\d+",num_string)[0])
+
+
+# def Normalization(pd_data):
+#     #对数据进行归一化处理 并存储到eth2.csv
+#     sam=[]
+#     a=['priceUSD','activeAddresses','adjustedVolume','paymentCount','exchangeVolume','priceBTC']
+#     for i in a:
+#         y = pd_data.loc[:, i]
+#         ys = list(preprocessing.scale(y))  # 归一化
+#         sam.append(ys)
+ 
+#     print(len(sam))
+#     with open('eth2.csv', 'w') as file:
+#         writer = csv.writer(file)
+#         for i in range(len(sam[0])):
+#             writer.writerow([sam[0][i],sam[1][i],sam[2][i],sam[3][i],sam[4][i],sam[5][i]])
 main_area_list=[]
