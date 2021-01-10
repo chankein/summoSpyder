@@ -198,7 +198,7 @@ if __name__ == '__main__':
         time.sleep(5)
     result_df = pd.concat(all_area_list)
     result_df.to_csv(csv_path,encoding='utf-16', header=True, index=False)
-    os.system('mv -f tmp_old_house.csv ' + csv_path)
+    #os.system('mv -f tmp_old_house.csv ' + csv_path)
     # result_df.to_csv('/home/ubuntu/s3data/ec_s3/old_house.csv',
     #                  encoding='utf-16', header=True, index=False)
 
